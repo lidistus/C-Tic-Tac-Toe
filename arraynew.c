@@ -1,43 +1,236 @@
 #include <stdio.h>
-# include <stdlib.h>
-   
-  int Xf = 88;  // Variable holding the ASCII value of "X".
-  int Of = 79;  // Variable holding the ASCII value of "O".
-  int Ef = 35;  // Variable holding the ASCII value of "#".
-  int row, col;
-  int f[4][5] = {
-    {0, 35, 35, 35, 35},
-    {0, 35, 35, 35, 35},
-    {0, 35, 35, 35, 35},
-    {0, 35, 35, 35, 35}
+#include <stdlib.h>
+#include <string.h>
+  char currentPlayer[20];
+  int i = 0;    // Variable for user input.
+  int state = 1;    // Variable for gamestate. If == 0 then exits game.
+  int currentTurn;    // Variable for currenTurn. Used in conjuction with turnCounter for displaying current player's turn.
+  int turnPiece;    // Variable used to determine what value to place in the Grid if the users input is successful.
+  int turnCounter;    // // Variable for currentTurn. Used in userTurn function for determing the current player's turn through increments.
+  int xF = 88;  // Variable holding the ASCII value of "X".
+  int oF = 79;  // Variable holding the ASCII value of "O".
+  int eF = 35;  // Variable holding the ASCII value of "#".
+  int row, col;   // Variable's for displaying the Grid. Used in the printGrid function via iteration to loop through the g[] array.
+
+
+  // Array for printGrid. Each object is set as an ASCII reference.
+  int g[3][4] = {
+    {0, 35, 35, 35},
+    {0, 35, 35, 35},
+    {0, 35, 35, 35}
   };
- 
-/* int f[4][4] = {
-    {Ef, Ef, Ef, Ef},
-    {Ef, Ef, Ef, Ef},
-    {Ef, Ef, Ef, Ef},
-    {Ef, Ef, Ef, Ef}
-  }; */
+
+  // Array for win condition checking. Each object is a true or false so that it may be referenced for its state.
+  int c[3][3] = {
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0}
+};
 
 
-// Function for displaying the Grid and any changes on the Grid
+
+// Function for displaying the Grid. Goes col -> row and repeats until all col have been printed.
 int printGrid(void) {
-  for(row = 0; row < 4; row++) {
+  for(row = 0; row < 3; row++) {
     printf("\n");
-    for(col = 0; col < 5; col++) {
-      printf("%c ", f[row][col]);
+    for(col = 0; col < 4; col++) {
+      printf("%c ", g[row][col]);
     }
   };
   printf("\n");
 }
 
+// Function for checking if the Grid space has been used. If not, it will apply the current player's (calculated through the turnPiece var) piece to the space.
+int gridPlacement() {
+   switch (i) {
+    case 1 :
+      if (g[0][1] != eF) {
+      printf("\033[2J"); // Attempting to clear screen manually. I could of made this into a function but feel it's better to have it as a single line here for clarity.
+      printf("This spot has already been used. Please try again: ");
+        }
+      else {
+      printf("\033[2J"); // Attempting to clear screen manually. I could of made this into a function but feel it's better to have it as a single line here for clarity.
+        g[0][1] = turnPiece;
+        c[0][0] = 1;
+      turnCounter++;
+        }
+    break;
+    case 2 :
+      if (g[0][2] != eF) {
+      printf("\033[2J"); // Attempting to clear screen manually. I could of made this into a function but feel it's better to have it as a single line here for clarity.
+      printf("This spot has already been used. Please try again: ");
+        }
+      else {
+      printf("\033[2J"); // Attempting to clear screen manually. I could of made this into a function but feel it's better to have it as a single line here for clarity.
+      g[0][2] = turnPiece;
+      c[0][1] = 1;
+      turnCounter++;
+        }
+    break;
+    case 3 :
+      if (g[0][3] != eF) {
+      printf("\033[2J"); // Attempting to clear screen manually. I could of made this into a function but feel it's better to have it as a single line here for clarity.
+      printf("This spot has already been used. Please try again: ");
+        }
+      else {
+      printf("\033[2J"); // Attempting to clear screen manually. I could of made this into a function but feel it's better to have it as a single line here for clarity.
+      g[0][3] = turnPiece;
+      c[0][2] = 1;
+      turnCounter++;
+        }
+    break;
+    case 4 :
+      if (g[1][1] != eF) {
+      printf("\033[2J"); // Attempting to clear screen manually. I could of made this into a function but feel it's better to have it as a single line here for clarity.
+      printf("This spot has already been used. Please try again: ");
+        }
+      else {
+      printf("\033[2J"); // Attempting to clear screen manually. I could of made this into a function but feel it's better to have it as a single line here for clarity.
+      g[1][1] = turnPiece;
+      c[1][0] = 1;
+      turnCounter++;
+        }
+    break;
+    case 5 :
+      if (g[1][2] != eF) {
+      printf("\033[2J"); // Attempting to clear screen manually. I could of made this into a function but feel it's better to have it as a single line here for clarity.
+      printf("This spot has already been used. Please try again: ");
+        }
+      else {
+      printf("\033[2J"); // Attempting to clear screen manually. I could of made this into a function but feel it's better to have it as a single line here for clarity.
+      g[1][2] = turnPiece;
+      c[1][1] = 1;
+      turnCounter++;
+        }
+    break;
+    case 6 :
+      if (g[1][3] != eF) {
+      printf("\033[2J"); // Attempting to clear screen manually. I could of made this into a function but feel it's better to have it as a single line here for clarity.
+      printf("This spot has already been used. Please try again: ");
+        }
+      else {
+      printf("\033[2J"); // Attempting to clear screen manually. I could of made this into a function but feel it's better to have it as a single line here for clarity.
+      g[1][3] = turnPiece;
+      c[1][2] = 1;
+      turnCounter++;
+        }
+    break;
+    case 7 :
+      if (g[2][1] != eF) {
+      printf("\033[2J"); // Attempting to clear screen manually. I could of made this into a function but feel it's better to have it as a single line here for clarity.
+      printf("This spot has already been used. Please try again: ");
+        }
+      else {
+      printf("\033[2J"); // Attempting to clear screen manually. I could of made this into a function but feel it's better to have it as a single line here for clarity.
+      g[2][1] = turnPiece;
+      c[2][0] = 1;
+      turnCounter++;
+        }
+    break;
+    case 8 :
+      if (g[2][2] != eF) {
+      printf("\033[2J"); // Attempting to clear screen manually. I could of made this into a function but feel it's better to have it as a single line here for clarity.
+      printf("This spot has already been used. Please try again: ");
+        }
+      else {
+      printf("\033[2J"); // Attempting to clear screen manually. I could of made this into a function but feel it's better to have it as a single line here for clarity.
+      g[2][2] = turnPiece;
+      c[2][1] = 1;
+      turnCounter++;
+        }
+    break;
+    case 9 :
+      if (g[2][3] != eF) {
+      printf("\033[2J"); // Attempting to clear screen manually. I could of made this into a function but feel it's better to have it as a single line here for clarity.
+      printf("This spot has already been used. Please try again: ");
+        }
+      else {
+      printf("\033[2J"); // Attempting to clear screen manually. I could of made this into a function but feel it's better to have it as a single line here for clarity.
+      g[2][3] = turnPiece;
+      c[2][2] = 1;
+      turnCounter++;
+        }
+    break;
+      }
+}
+
+// Function for taking user input. Checks if input is greater than 17. If true, then it restarts the function.
+int userInput() {
+  printf("Please select your box by using a number 1 - 9:\n");
+  scanf("%d", &i);
+  if (i > 9 || i == 0) {
+//  printf("\033[2J"); // Attempting to clear screen manually. I could of made this into a function but feel it's better to have it as a single line here for clarity.
+    printf("You have entered an incorrect number. Please try again:\n");
+    userInput();
+  }
+// Attempting to add this function into the next.
+  gridPlacement();
+}
+
+// Function for checking user's turn. Utilizes turnCounter() and divides the variables value by two to check the turn.
+int userTurn() {
+if (turnCounter % 2) {
+  printf("It is Player 2's turn.\n");
+  currentTurn = 1;
+  turnPiece = xF;
+  strcpy(currentPlayer, "Player 2");
+  }
+  else {
+    printf("It is Player 1's turn.\n");
+    currentTurn = 0;
+    turnPiece = oF;
+    strcpy(currentPlayer, "Player 1");
+  }
+}
+
+int winConditionResults() {
+  printf("%s has won the game. Thank you for playing!\n", currentPlayer);
+  printf("Final results: ");
+  printGrid();
+    turnCounter = 20;
+}
+
+int winConditionCheck() { 
+  //  Top Row 
+  if (g[0][1] == turnPiece && g[0][2] == turnPiece && g[0][3] == turnPiece) {winConditionResults();}
+
+  //  Middle Row 
+  else if (g[1][1] == turnPiece && g[1][2] == turnPiece && g[1][3] == turnPiece) {winConditionResults();}
+
+  //  Bottom Row
+  else if (g[2][1] == turnPiece && g[2][2] == turnPiece && g[2][3] == turnPiece) {winConditionResults();}
+
+  //  Left Col: |
+  else if (g[0][1] == turnPiece && g[1][1] == turnPiece && g[2][1] == turnPiece) {winConditionResults();}
+
+  //  Middle Col: |
+  else if (g[0][2] == turnPiece && g[1][2] == turnPiece && g[2][2] == turnPiece) {winConditionResults();}
+
+  //  Bottom Col: |
+  else if (g[0][3] == turnPiece && g[1][3] == turnPiece && g[2][3] == turnPiece) {winConditionResults();}
+  
+  //  Bottom-Left to Top-Right Diag
+  else if (g[2][1] == turnPiece && g[1][2] == turnPiece && g[0][3] == turnPiece) {winConditionResults();}
+
+  //  Up-Left to Down-Right Diag 
+  else if (g[0][1] == turnPiece && g[1][2] == turnPiece && g[2][3] == turnPiece) {winConditionResults();}
+  
+  //  Checks for a tie.
+  else if (c[0][0] && c[0][1] && c[0][2] && c[1][0] && c[1][1] && c[1][2] && c[2][0] && c[2][1] && c[2][2] == 1) {printf("Draw");}
+  
+}
+
+// Main function for application.
 int main(void) 
 {
-  printGrid();
-  f[1][3] = Xf;
-  system("clear");
-  printGrid();
-  scanf(userInput1) // Add user input and test it working or not working. this is where it was last left off.
+  printf("\033[2J"); // Attempting to clear screen manually. I could of made this into a function but feel it's better to have it as a single line here for clarity.
+  while (turnCounter < 12) {
+  printGrid(); // Prints the Grid layout.
+  userTurn(); // Checks turnCounter and sets the turn for player 1 or 2.
+  userInput(); // Checks inputs from the user.
+  winConditionCheck(); 
+  }
+  state = 0;
   return 0;
 
 }
