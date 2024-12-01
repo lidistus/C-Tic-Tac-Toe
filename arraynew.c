@@ -2,9 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <time.h>
   
-  int runningState = 1;
-  char currentPlayer[20];
+  int runningState = 1; // Variable controlling the main loop of the program.
+  char currentPlayer[20]; // Variable containing the active "name" of the current player.
   int i = 0;    // Variable for user input.
   int state = 1;    // Variable for gamestate. If == 0 then exits game.
   int currentTurn;    // Variable for currenTurn. Used in conjuction with turnCounter for displaying current player's turn.
@@ -25,11 +26,12 @@
 
   // Array for win condition checking. Each object is a true or false so that it may be referenced for its state.
   int c[3][3] = {
-  {1, 1, 1},
-  {1, 1, 1},
-  {1, 1, 0}
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0}
   };
 
+// Function for resetting the arrays above to default values for a new game.
 int logicReset() {
 
   i = 0;
@@ -229,7 +231,7 @@ int drawCondition() {
     state = 2;
   
 }
-
+// Function to check the grid for a win condition. References the g[][] array for checking if the current player has a wind condition (lease reference tic-tac-toe win conditions) based on the active turnPiece. For a draw, it references the c[][] array to see if each element == 1. If so, it will go back to the main menu.
 int winConditionCheck() { 
   //  Top Row 
   if (g[0][1] == turnPiece && g[0][2] == turnPiece && g[0][3] == turnPiece) {winConditionResults();}
@@ -260,51 +262,76 @@ int winConditionCheck() {
   
 }
 
+// Function for counting time. Used in the 
+int timeCount() {
+    time_t time1 = time(NULL); // Grabs current system time since epoch.
+    sleep(1);
+    time_t time2 = time(NULL); // I have no idea what im doing.
+
+    printf("You will now exit the game in...\n");
+    for(int i = 3; time2 > time1 && i > 0; i--) {
+      printf("%d...\n", i);
+      sleep(1);
+    }
+    state = 3;
+}
+
+// Function for the Main Menu system. Uses a switch statement to go into ares of the program.
 int mainMenu() {
 
   
-  printf("\033[2J"); // Attempting to clear screen manually. I could of made this into a function but feel it's better to have it as a single line here for clarity.
+  // printf("\033[2J"); // Attempting to clear screen manually. I could of made this into a function but feel it's better to have it as a single line here for clarity.
   int menuInput;
-  printf("Would you like to play the game?\n");
+  printf("Welcome to Tic-Tic-Toe! Please select an option from the menu below.\n\n");
+  printf("1. Person V.S. Person\n");
+  printf("2. Person V.S. CPU\n");
+  printf("3. Exit Game\n");
   scanf("%d", &menuInput);
-  switch (menuInput) {
+  
+  // Switch used to check menuInput.
+  switch (menuInput) {    
+    //Option 1: Person VS Person
     case 1:
-    printf("\033[2J"); // Attempting to clear screen manually. I could of made this into a function but feel it's better to have it as a single line here for clarity.
-    logicReset();
+      printf("\033[2J"); // Attempting to clear screen manually. I could of made this into a function but feel it's better to have it as a single line here for clarity.
+      logicReset();
       break;
-
+    // Option 2: Person VS CPU
     case 2:
 
     break;
 
+    // Option 3: Exit Game
+    case 3:
+      printf("\033[2J"); // Attempting to clear screen manually. I could of made this into a function but feel it's better to have it as a single line here for clarity.
+      timeCount();
+    
+    break;
+
     default:
+      printf("That is not a correct input. Please try again.\n");
+      sleep(1);
   }
-
-  }
-
-
+}
 
 // Main function for application.
 int main(void) 
 {
   while (runningState == 1) {
-  while (state == 1) {
-    mainMenu();
-  }
+    while (state == 1) {
+      printf("\033[2J"); // Attempting to clear screen manually. I could of made this into a function but feel it's better to have it as a single line here for clarity.
+      mainMenu();
+    }
 
-  while (state == 2) {
-  printGrid(); // Prints the Grid layout.
-  userTurn(); // Checks turnCounter and sets the turn for player 1 or 2.
-  userInput(); // Checks inputs from the user.
-  winConditionCheck(); 
-  }
-/*  printf("\033[2J"); // Attempting to clear screen manually. I could of made this into a function but feel it's better to have it as a single line here for clarity.
-  while (turnCounter < 12) {
-  printGrid(); // Prints the Grid layout.
-  userTurn(); // Checks turnCounter and sets the turn for player 1 or 2.
-  userInput(); // Checks inputs from the user.
-  winConditionCheck(); 
-  } */
+    while (state == 2) {
+      printGrid(); // Prints the Grid layout.
+      userTurn(); // Checks turnCounter and sets the turn for player 1 or 2.
+      userInput(); // Checks inputs from the user.
+      winConditionCheck(); 
+    }
+
+    while (state == 3) {
+      return 0;
+    }
   }
   return 0;
 
